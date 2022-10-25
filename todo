@@ -3,3 +3,6 @@
 - background main - care o sa fie acelasi si pentru sign si register si ranking table
 
 - link-uri puse la butoane
+
+- style.css !!! cand e clasa 'selected' merge background-ul cum a facut proful, dar nu merge text decoration sau sa modific textul in orice fel sau sa 
+pun padding. NIMIC!

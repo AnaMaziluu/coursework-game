@@ -9,9 +9,10 @@
 
 <!-- Contents of the page -->
 <div class="main-page-wrap">
-        <p>here comes the game</p>
+    <canvas id="canvas"></canvas>
 </div>
 
+<script src="game.js" async defer></script>
 
 <?php
     //Output the footer
