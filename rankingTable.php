@@ -19,7 +19,6 @@
     </div> -->
 </div>
 
-<!-- test -->
 
 <?php
     //Output the footer
