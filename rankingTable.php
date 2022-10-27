@@ -9,18 +9,64 @@
 
 <!-- Contents of the page -->
 <div class="main-page-wrap">
+    
+    <!-- Ranking table -->
 
-    <p>here comes the ranking table </p>
-    <!-- <div class="main-box">
-        <a href="gamePage/gamePage.html"><button id="start-button"><span>Start</span></button></a>
-        <button>Top score: 0</button>
-        <button id="ranking-table-button">Ranking table</button>
-        <div><p>Instructions: use the left and and right arrow keys to avoid the cubes. Press P to pause.</p></div>
-    </div> -->
+    <table class="table">
+    <caption>Ranking table</caption>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Points</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Dom</td>
+                <td>6000</td>
+            </tr>
+            <tr class="active-row">
+                <td>Melissa</td>
+                <td>5150</td>
+            </tr>
+            <tr>
+                <td>Andrei</td>
+                <td>6000</td>
+            </tr>
+            <tr>
+                <td>Catalina</td>
+                <td>6000</td>
+            </tr>
+            <tr>
+                <td>Laura</td>
+                <td>6000</td>
+            </tr>
+            <tr>
+                <td>Ovi</td>
+                <td>6000</td>
+            </tr>
+            <tr>
+                <td>Marc</td>
+                <td>6000</td>
+            </tr>
+            <tr>
+                <td>Bob</td>
+                <td>6000</td>
+            </tr>
+            <tr>
+                <td>Michael</td>
+                <td>6000</td>
+            </tr>
+            <tr>
+                <td>Kelly</td>
+                <td>6000</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 
+<!-- //Output the footer -->
 <?php
-    //Output the footer
     outputFooter();
 ?>
