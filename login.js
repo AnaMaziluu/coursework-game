@@ -6,7 +6,6 @@ function loadUsers() {
     if (result) {
         users = result;
     }
-    console.log("users loaded")
 }
 
 function saveUsers() {
@@ -28,63 +27,48 @@ function setHighScore(username, score) {
 }
 
 function validateUserLogin(username, password) {
+    // trebuie sa verific daca este in local storage user cu username-ul si parola asta
     return true;
 }
 
-function validateUsernameSignup(username) {
-    return true;
+function validateUsernameSignup() {
+    let usernameField = document.getElementById('userSignup');
+    let input = usernameField.value;
+
+        if (input === "") {
+            usernameField.setCustomValidity("Enter your username!");
+            console.log("e gol usernameul");
+            return false;
+        } else if (!(/^[A-Za-z0-9_]*$/.test(input))) {
+            usernameField.setCustomValidity("Your username should contain just letters, numbers or underscore");
+            console.log("nu contine doar litere sau numere sau _");
+            return false;
+        }
+        else {
+            return true;
+        }
+        //  la fel ca mai jos, trebuie sa verific ca nu este deja in lista mea de useri, adica in local storage
 }
 
-function validateEmailAddressSignup(email) {
+
+function validateEmailAddressSignup() {
+    // pe langa validare de adresa, trebuie sa validez si ca nu exista in userii mei adresa asta
     return true;
 } 
 
-function validatePasswordStrength(password) {
+function validatePasswordStrength() {
     return true;
 }
 
-function validatePasswordMatch(password, passwordCopy) {
-    if (password == passwordCopy) {
+function validatePasswordMatch() {
+    let password = document.getElementById('passSignup');
+    let passwordCopy = document.getElementById('pass2Signup');
+    if (password.value == passwordCopy.value) {
         return true;
     } else {
-        showPasswordMismatchError();
+        passwordCopy.setCustomValidity("Passwords don't match!");
         return false;
     }
-}
-
-function showLoginFailedError() {
-    // TO DO: error message when log in fails
-    console.log("show log in failed")
-}
-
-function showEmailExistsError() {
-    // TO DO: when try to sign up
-    console.log("email exists")
-}
-
-function showUserExistsError() {
-    // TO DO: 
-    console.log("user exists")
-}
-
-function showPasswordError() {
-    // TO DO:
-    console.log("password is invalid")
-}
-
-function showPasswordMismatchError() {
-    // TO DO:
-    console.log("passwords don't match")
-}
-
-function showEmailNotValidError() {
-    // TO DO:
-    console.log("email is invalid")
-}
-
-function showUserNotValidError() {
-    // TO DO:
-    console.log("username is invalid")
 }
 
 function login(username) {
@@ -103,19 +87,22 @@ function onLoginSubmit() {
 }
 
 function onSignupSubmit() {
-    let username = document.getElementById('userSignup').value;
-    let password = document.getElementById('passSignup').value;
-    let passwordCopy = document.getElementById('pass2Signup').value;
-    let email = document.getElementById('emailSignup').value;
-
-    if(validateUsernameSignup(username) 
-    && validateEmailAddressSignup(email) 
-    && validatePasswordStrength(password) 
-    && validatePasswordMatch(password,passwordCopy)) {
+    if (validateUsernameSignup() 
+        && validateEmailAddressSignup() 
+        && validatePasswordStrength() 
+        && validatePasswordMatch()
+    ) {
+        let username = document.getElementById('userSignup').value;
+        let password = document.getElementById('passSignup').value;
+        let email = document.getElementById('emailSignup').value;
         addUser(username, email, password);
         login(username);
     }
 }
 
-
 loadUsers();
+
+let usernameField = document.getElementById('userSignup');
+usernameField.addEventListener("input", () => {
+    usernameField.setCustomValidity("");
+});

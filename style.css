@@ -328,9 +328,20 @@ caption {
 	font-size:12px;
 }
 .login-form .group .button{
-	/* background:#1161ee; */
     background:#343333;
 }
+
+.login-form .group .button:hover {
+    cursor: pointer;
+    background:#4c4b4b;
+}
+
+.login-form .group .button:active {
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+
+
 .login-form .group label .icon{
 	width:15px;
 	height:15px;

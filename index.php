@@ -11,7 +11,7 @@
 <div class="main-page-wrap">
     <div class="main-box">
         <div class="elements-of-box">
-            <a href="gamePage.php" class="start-button"><button id="start-button"><span>Start</span></button></a>
+            <a class="start-button"><button id="start-button" class="start-button" onclick="onStartButtonClicked()"><span>Start</span></button></a>
             <a href="rankingTable.php" id="ranking-table-button">Ranking table</a>
             <p>Instructions: use the left and and right arrow keys to avoid the cubes. Press P to pause.</p>
         </div>
