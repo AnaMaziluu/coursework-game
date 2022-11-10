@@ -1,0 +1,123 @@
+/* Reset the implicit style */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 100%;
+  }
+
+/* Positioning elements of the page */
+
+body {
+    height: 100vh;
+    width: 100vw;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.footer {
+    flex-shrink: 0;
+    background-color: #adb5bd;
+    padding: 5px;
+}
+
+
+/* Styling the navbar */
+
+.navbar {
+    background-color: #adb5bd;
+    position: relative;
+    border-bottom: 2px solid black;
+}
+
+
+.logo {
+    position: relative;
+    float: left;
+    left: 15px;
+    top: 3px;
+}
+
+.logo-link {
+    text-decoration: none;
+}
+
+.logo-text {
+    position: relative;
+    font-size: 20px;
+    top: -15px;
+    display: inline-block;
+    color: black;
+}
+
+.logo-image {
+    height: 30px;
+    width: 30px;
+    margin: 10px 0;
+    display: inline-block;
+
+}
+
+.menu {
+    float: right;
+}
+
+.menu a {
+    text-decoration: none;
+    color: black;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+    position: relative;
+    top: 15px;
+    left: -10px;
+    padding-left: 10px;
+}
+
+.menu a:hover {
+    color:#284b63;
+}
+
+ .menu a.selected {
+    width: 800px;
+    text-decoration: underline;
+    padding: 10px;
+}
+
+/* Styling the main window */
+
+.main-page-wrap {
+    background-color: white;
+    background-image: url('../images/background-image.jpeg');
+    background-size: cover;
+    background-position: -200px 0 0 0;
+    background-repeat: none;
+    flex: 1 0 auto;
+    border: 3px solid black;
+    border-radius: 5px;
+    position: relative;
+}
+
+.main-box {
+    border: 4px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    padding: 20px;
+    width: 20em;
+    height: 20em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    margin: auto;
+    background-color: rgba(255, 255, 255, 0.732) ;
+}
+
+.main-box * {
+    margin: auto;
+    text-align: center;
+    padding: 15px 10px 15px 10px;
+}

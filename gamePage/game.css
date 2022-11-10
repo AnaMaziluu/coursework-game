@@ -1,0 +1,8 @@
+@import "../common/common.css";
+
+/* Setting all the available space for the canvas */
+
+#canvas {
+    width: 100%;
+    height: 100%;
+}

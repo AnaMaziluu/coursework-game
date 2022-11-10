@@ -1,8 +1,8 @@
 <?php
-    //Include the PHP functions to be used on the page 
-    include('./common.php'); 
+    // Include the PHP functions to be used on the page 
+    include('../common/common.php');
 	
-    //Output header and navigation 
+    // Output header and navigation 
     outputHeader("Cube Runner");
     outputBannerNavigation("Home");
 ?>
@@ -14,7 +14,7 @@
 
 <script src="game.js" async defer></script>
 
+<!-- Output the footer -->
 <?php
-    //Output the footer
     outputFooter();
 ?>

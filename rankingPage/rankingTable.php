@@ -1,6 +1,6 @@
 <?php
     //Include the PHP functions to be used on the page 
-    include('common.php'); 
+    include('../common/common.php');
 	
     //Output header and navigation 
     outputHeader("Cube Runner - Ranking table");
@@ -65,6 +65,7 @@
     </table>
 </div>
 
+<script src="./rankingTable.js" type="module"></script>
 
 <!-- //Output the footer -->
 <?php

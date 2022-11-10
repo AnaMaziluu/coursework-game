@@ -1,0 +1,48 @@
+@import "../common/common.css";
+
+/* Styling the ranking table page*/
+
+caption {
+    color: rgb(16, 16, 16);
+    padding-bottom: 20px;
+    font-weight: bold;
+    font-size: larger;
+}
+
+.table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.83);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    margin: auto;
+}
+
+.table thead tr{
+    background-color: #7c807f;
+    color: #191717;
+    text-align: left;
+}
+
+.table th,
+.table td {
+    padding: 12px 15px;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #111010;
+    background-color: rgba(255, 255, 255, 0.762);
+}
+
+
+.table tbody tr.active-row {
+    font-weight: bold;
+    color: #fcffff;
+    background-color: #49554f;
+}

@@ -1,10 +1,9 @@
 function onStartButtonClicked() {
-    console.log("s-a apasat butonul")
     let loggedInUser = localStorage.getItem('loggedInUser');
     if (loggedInUser) {
-        window.location.href='gamePage.php';
+        window.location.href='../gamePage/gamePage.php';
     } else {
-        window.location.href='login.php';
+        window.location.href='../loginPage/login.php';
     }
 }
 

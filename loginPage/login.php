@@ -1,7 +1,6 @@
 <?php
     //Include the PHP functions to be used on the page 
-    include('common.php'); 
-	
+    include('../common/common.php');
 
     //Output header and navigation 
     outputHeader("Cube Runner - Login");
@@ -69,7 +68,7 @@
 </div>
 
 
-<script src="login.js" async defer></script>
+<script src="login.js" type="module"></script>
 
 
 <!-- //Output the footer -->

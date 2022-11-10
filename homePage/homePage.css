@@ -1,0 +1,50 @@
+@import url("../common/common.css");
+
+/* Styling the Start button */
+
+.elements-of-box * {
+    padding-top: 20px;
+}
+
+#start-button {
+    display: block;
+    padding: 15px 25px;
+    margin-bottom: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #000000;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+}
+
+.elements-of-box .start-button {
+    text-decoration: none;
+}
+
+
+#start-button:hover {
+    background-color: #164d67;
+}
+
+#start-button:active {
+    background-color: #164d67;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+/* Styling the Ranking table link */
+
+a#ranking-table-button {
+    color: black;
+    position: relative;
+    left: -5px;
+}
+
+#ranking-table-button {
+    color: black;
+}
