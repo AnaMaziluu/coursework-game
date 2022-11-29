@@ -10,6 +10,10 @@ const TEXTURE_ROCK  = "textures/rockn.png";
 
 // This creates a basic Babylon Scene object (non-mesh)
 let scene = new BABYLON.Scene(engine);
+
+// This should help with the loading
+scene.getAnimationRatio();
+
 // scene.ambientColor = new BABYLON.Color3(0.5, 0.5, 0.5);
 let score = 0;
 let displayedBoxes = [];
@@ -147,7 +151,7 @@ let light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 50, 20)
 light.intensity = 0.8;
 
 // Creating an arrow
-const player = BABYLON.MeshBuilder.CreateDisc("disc", {radius: 0.2, tessellation: 3});
+const player = BABYLON.MeshBuilder.CreateDisc("disc", {radius: 0.15, tessellation: 3});
 player.position.z = -48;
 player.position.y = -0.5;
 player.rotation.z = degreesToRadians(-30);
@@ -204,7 +208,6 @@ function updatePlayerPosition() {
 function checkIntersections() {
     for (let box of displayedBoxes) {
         if (player.intersectsMesh(box, false)) {
-            console.log("yep")
             return true;
         }
     }
@@ -261,12 +264,8 @@ function updatesHighScore() {
     if (returnedUsers) {
         users = JSON.parse(returnedUsers);
     }
-    // returnedUsers[loggedInUser];
-    console.log(users)
-    console.log(users[loggedInUser], "?")
 
     let previousScore = users[loggedInUser].highScore;
-    console.log(previousScore, "previousScore")
 
     if (previousScore < score) {
         users[loggedInUser].highScore = score;
@@ -277,13 +276,23 @@ function updatesHighScore() {
     
 }
 
+function clickOnPlayAgain() {
+    console.log("s-a apasat butonul");
+    window.location.href='../gamePage/gamePage.php';
+}
+
 function gameOver() {
     engine.stopRenderLoop();
     let canvas = document.querySelector('.main-page-wrap');
     canvas.innerHTML = `
-        <div> Game over! Your score is ${score}</div>
-        <button class="play-again-button"> Play again! </button>
+        <div style="justify-content: center; margin: auto; background-color: white; width: 50%; border: 3px solid black; padding: 10px; text-align: center;"> Game over! Your score is ${score}</div>
+        <button id="play-again-button" style="width: 20%; border: 3px solid black; padding: 10px; text-align: center;"> Play again! </button>
     `;
+
+    let btn = document.getElementById("play-again-button");
+    btn.addEventListener('click', event => {
+        clickOnPlayAgain();
+      });
     updatesHighScore();
 }
 
@@ -300,7 +309,6 @@ engine.runRenderLoop(function() {
     if (secondsPassed % boxGenerationRate == 0 && !secondsPassed == 0) {
         createRandomBox();
         createRandomCoin();
-        console.log(displayedBoxes)
     }
     
     if (checkIntersections()) {
@@ -312,6 +320,7 @@ engine.runRenderLoop(function() {
     rotateCoins()
     frameCount += 1;
 
-    console.log(score)
+    console.log(score);
+
     scene.render();
 })
