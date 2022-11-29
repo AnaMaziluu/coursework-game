@@ -68,7 +68,7 @@
 </div>
 
 
-<script src="login.js" type="module"></script>
+<script src="login.js"></script>
 
 
 <!-- //Output the footer -->

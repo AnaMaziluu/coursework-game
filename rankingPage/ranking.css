@@ -41,8 +41,15 @@ caption {
 }
 
 
-.table tbody tr.active-row {
+/* .table tbody tr.active-row {
     font-weight: bold;
     color: #fcffff;
     background-color: #49554f;
+} */
+
+.currentPlayer {
+    font-weight: bold;
+    color: rgb(95, 189, 19);
+    background-color: #29be73fa;
+    text-transform: uppercase;
 }

@@ -17,12 +17,12 @@
                 </button>
             </a>
             <a href="../rankingPage/rankingTable.php" id="ranking-table-button">Ranking table</a>
-            <p>Instructions: use the left and and right arrow keys to avoid the cubes. Press P to pause.</p>
+            <p>Instructions: use the left and right arrow keys to avoid the cubes. Collect coins to increase the score.</p>
         </div>
     </div>
 </div>
 
-<script src="homePage.js" type="module"></script>
+<script src="homePage.js"></script>
 
 <!-- Output the footer -->
 <?php

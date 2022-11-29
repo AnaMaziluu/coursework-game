@@ -12,7 +12,7 @@
     
     <!-- Ranking table -->
 
-    <table class="table">
+    <table id="table" class="table">
     <caption>Ranking table</caption>
         <thead>
             <tr>
@@ -20,7 +20,7 @@
                 <th>Points</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="tbody">
             <tr>
                 <td>Dom</td>
                 <td>6000</td>
@@ -65,7 +65,7 @@
     </table>
 </div>
 
-<script src="./rankingTable.js" type="module"></script>
+<script src="./rankingTable.js"></script>
 
 <!-- //Output the footer -->
 <?php

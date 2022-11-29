@@ -35,6 +35,7 @@ function addUser(username, email, password) {
 function setHighScore(username, score) {
     users[username].highScore = score;
     saveUsers();
+    console.log("setHighScore")
 }
 
 function validateUserLogin(username, password) {
