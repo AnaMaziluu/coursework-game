@@ -3,7 +3,7 @@ const loggedInUserKey = "loggedInUser";
 let users = {};
 
 function navigateToHomePage() {
-    window.location.href='/homePage/homePage.php';
+    window.location.href = '../homePage/homePage.php';
 }
 
 function saveUsers() {

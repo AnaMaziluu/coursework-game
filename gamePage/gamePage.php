@@ -9,7 +9,9 @@
 
 <!-- Contents of the page -->
 <div class="main-page-wrap">
-    <canvas id="canvas"></canvas>
+    <canvas id="canvas">
+        
+    </canvas>
 </div>
 
 <script src="game.js" async defer></script>

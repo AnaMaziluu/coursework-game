@@ -16,7 +16,7 @@
             <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
 
             <div class="login-form">
-                <form>
+                <form onsubmit="return false;">
                     <div class="sign-in-htm">
                         <div class="group">
                             <label for="user" class="label">Username</label>
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                 </form>
-                <form>
+                <form onsubmit="return false;">
                     <div class="sign-up-htm">
                         <div class="group">
                             <label for="userSignup" class="label">Username</label>

@@ -285,8 +285,9 @@ function gameOver() {
     engine.stopRenderLoop();
     let canvas = document.querySelector('.main-page-wrap');
     canvas.innerHTML = `
-        <div style="justify-content: center; margin: auto; background-color: white; width: 50%; border: 3px solid black; padding: 10px; text-align: center;"> Game over! Your score is ${score}</div>
-        <button id="play-again-button" style="width: 20%; border: 3px solid black; padding: 10px; text-align: center;"> Play again! </button>
+    // justify-content: center; 
+        <div style="margin-left: 50%; transform: translate(-50%); margin-top: 10px; margin-bottom: 10px; background-color: white; width: 20%; border: 3px solid black; padding: 10px; text-align: center;"> Game over!<br> Your score is: ${score}</div>
+        <button id="play-again-button" style="color: red; width: 20%; margin-left: 50%; transform: translate(-50%); border: 3px solid black; padding: 10px; text-align: center;"> Play again! </button>
     `;
 
     let btn = document.getElementById("play-again-button");
@@ -321,6 +322,10 @@ engine.runRenderLoop(function() {
     frameCount += 1;
 
     console.log(score);
+    // Tried to put the score on canvas -- not working
+    // let canvas = document.querySelector('#canvas');
+    // canvas.innerHTML += `
+    // something `;
 
     scene.render();
 })
