@@ -1,12 +1,35 @@
 // import setHighScore from '../loginPage/login.js';
+let loggedInUser = localStorage.getItem('loggedInUser');
+
+function logOut() {
+    localStorage.removeItem('loggedInUser');
+}
+
+function updateNavigationBar() {
+    if(loggedInUser) {
+        let signIn = document.getElementById('signIn');
+        signIn.textContent = 'Sign out';
+        signIn.onclick = logOut;
+    }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    updateNavigationBar();
+});
+
 
 let canvas = this.document.getElementById('canvas');
+
+window.onload = function() {
+    canvas.focus();
+}
+
+let scoreElement = this.document.getElementById('score');
 let engine = new BABYLON.Engine(canvas, true);
 
 // Materials for coins
 
 const TEXTURE_FLOOR = "textures/floor_bump.png";
-const TEXTURE_ROCK  = "textures/rockn.png";
 
 // This creates a basic Babylon Scene object (non-mesh)
 let scene = new BABYLON.Scene(engine);
@@ -16,52 +39,53 @@ scene.getAnimationRatio();
 
 // scene.ambientColor = new BABYLON.Color3(0.5, 0.5, 0.5);
 let score = 0;
+let boxSpawnDistance = 40;
 let displayedBoxes = [];
 let displayedCoins = [];
 
-let forwardMovementSpeed = 0.09;
+let forwardMovementSpeed = 0.1;
 let horizontalMovementSpeed = 1;
 let frameCount = 0;
 let boxNumber = 0;
 let boxSize = 0.6;
 let coinSize = 0.2;
-let boxGenerationRate = 0.5;
-let coinGenerationRate = 0.5;
-let coinRotationSpeed = 0.3;
+let boxGenerationRate = 0.3;
+let coinGenerationRate = 0.4;
+let coinRotationSpeed = 0.1;
+let defaultCameraZRotation = 0;
+let defaultPlayerZRotation = -30;
+let tilt = 3;
+let playerTilt = 20;
+let gameOverDelay = 1000;
+let pointsPerFrame = 1;
+let pointsPerCoin = 3000;
 
+let coinEffect = new BABYLON.Sound("coin", "sounds/coin.ogg", scene);
+let boxEffect = new BABYLON.Sound("box", "sounds/box.ogg", scene);
 
 // helpers
 function degreesToRadians(degrees) {
     return degrees / 360 * 2 * 3.141592
 }
 
+function unmuteAudio() {
+    BABYLON.Engine.audioEngine.unlock();
+}
 
-const makeCoinMesh = (coinType) => {
-    // Physically Based Materials - Measured BaseColors for metals:
-    // https://docs.unrealengine.com/5.0/en-US/physically-based-materials-in-unreal-engine/
-    const params = {
-        "GOLD":   { metalic:1.0, roughness:0.2, color:[1.000, 0.766, 0.336], texture:TEXTURE_FLOOR, height:0.05, diameter: 0.5 },
-        "SILVER": { metalic:1.0, roughness:0.4, color:[0.972, 0.960, 0.915], texture:TEXTURE_ROCK, height:0.05, diameter:0.8 },
-        "COPPER": { metalic:1.0, roughness:0.2, color:[0.955, 0.637, 0.538], texture:TEXTURE_ROCK, height:0.05, diameter:0.6 },
-    };
-
-    const param = params[coinType];
+function makeCoinMesh() {
     const mat = new BABYLON.PBRMaterial("material", scene);
-    mat.metallic = param.metalic;
-    mat.roughness = param.roughness;
+    mat.metallic = 1.0;
+    mat.roughness = 0.4;
     mat.forceIrradianceInFragment = true;
-    mat.albedoColor = new BABYLON.Color3(param.color[0], param.color[1], param.color[2]);
-    mat.bumpTexture = new BABYLON.Texture(param.texture, scene);
-
-    // var randomColor = BABYLON.Color3.Random()
-    // mat.emissiveColor = randomColor
+    mat.albedoColor = new BABYLON.Color3(1.000, 0.766, 0.336);
+    mat.bumpTexture = new BABYLON.Texture(TEXTURE_FLOOR, scene);
 
     const faceUV = [];
     faceUV[0] = new BABYLON.Vector4(0, 0, 1.00, 1);
     faceUV[1] =	new BABYLON.Vector4(1, 0, 0.32, 1);
     faceUV[2] = new BABYLON.Vector4(0, 0, 1.00, 1);
 
-    mesh = BABYLON.MeshBuilder.CreateCylinder("cylinder", {height:param.height, diameter:param.diameter, faceUV: faceUV}, scene);
+    mesh = BABYLON.MeshBuilder.CreateCylinder("cylinder", {height:0.03, diameter:0.5, faceUV: faceUV}, scene);
     mesh.material = mat;
 
     displayedCoins.push(mesh);
@@ -74,7 +98,7 @@ function createBox(red, green, blue, xPosition, zPosition) {
     let box = BABYLON.MeshBuilder.CreateBox(boxName, {size: boxSize}, scene);
     box.position.x = xPosition;
     box.position.z = zPosition;
-    box.position.y = -0.5;
+    box.position.y = 0;
 
     let diffuseMultiplier = 0.8
     let specularMultiplier = 0.6
@@ -88,9 +112,6 @@ function createBox(red, green, blue, xPosition, zPosition) {
     material.ambientColor = new BABYLON.Color3(red * ambientMultiplier, green * ambientMultiplier, blue * ambientMultiplier);
     box.material = material;
 
-    box.rotation.x = degreesToRadians(45);
-    box.rotation.y = degreesToRadians(45);
-
     boxNumber += 1;
     displayedBoxes.push(box);
 }
@@ -101,35 +122,34 @@ function getRandomElement(array) {
 
 function createRandomBox() {
     let colorPossibilities = [0.5, 0.7, 1];
-    let positionPossibilities = [-15, -10, -5, 0, 5, 10, 15];
+    let positionPossibilities = [-15, -12.5, -10, -7.5, -5, -2.5, 0, 2.5, 5, 7.5, 10, 12.5, 15];
 
     let randomRed = getRandomElement(colorPossibilities);
     let randomGreen = getRandomElement(colorPossibilities);
     let randomBlue = getRandomElement(colorPossibilities);
 
     let randomX = getRandomElement(positionPossibilities) + player.position.x;
-    let Zposition = player.position.z + 10;
+    let Zposition = player.position.z + boxSpawnDistance;
     createBox(randomRed, randomGreen, randomBlue, randomX, Zposition);
 }
 
 function createRandomCoin() {
-    let coin = makeCoinMesh("GOLD");
-    let positionPossibilities = [-17, -12, -7, 2, 7, 12, 17];
+    let coin = makeCoinMesh();
+    let positionPossibilities = [-17, -11, -7, 2, 7, 11, 17];
     let randomX = getRandomElement(positionPossibilities) + player.position.x;
-    let randomZ = player.position.z + 10;
+    let randomZ = player.position.z + boxSpawnDistance;
     coin.position.x = randomX;
     coin.position.z = randomZ;
-    coin.position.y = -0.3;
-    coin.rotation.x = degreesToRadians(110);
-    coin.rotation.y = degreesToRadians(45);
+    coin.position.y = 0.2;
+    coin.rotation.x = degreesToRadians(90);
 }
-
 
 // Set the color of the background to white
 scene.clearColor = new BABYLON.Color3(1, 1, 1);
 
 // This creates and positions a free camera (non-mesh)
-let camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 0, -50), scene);
+let camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 1, -50), scene);
+camera.rotation.x = degreesToRadians(-20);
 camera.inputs.clear();
 
 // This targets the camera to scene origin
@@ -139,9 +159,7 @@ camera.setTarget(BABYLON.Vector3.Zero());
 camera.attachControl(canvas, true);
 
 // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-let light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 50, 20), scene);
-
-
+let light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 20, -50), scene);
 
 // var  anotherLight = new BABYLON.DirectionalLight("dir01", new BABYLON.Vector3(-200, -10, 200), scene);
 // anotherLight.position = new BABYLON.Vector3(0, 150, -250);
@@ -151,18 +169,11 @@ let light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 50, 20)
 light.intensity = 0.8;
 
 // Creating an arrow
-const player = BABYLON.MeshBuilder.CreateDisc("disc", {radius: 0.15, tessellation: 3});
-player.position.z = -48;
-player.position.y = -0.5;
-player.rotation.z = degreesToRadians(-30);
-
-// create boxes
-// let box1 = createBox(1, 0, 0, -15, 0);
-// let box2 = createBox(1, 0.6, 0, -10, 0);
-// let box3 = createBox(1, 1, 0, -5, 0);
-// let box4 = createBox(0, 1, 0, 5, 0);
-// let box5 = createBox(0, 1, 1, 10, 0);
-// let box6 = createBox(0, 0, 1, 15, 0);
+const player = BABYLON.MeshBuilder.CreateDisc("disc", {radius: 0.25, tessellation: 3});
+player.position.z = -47;
+player.position.y = 0;
+player.rotation.z = degreesToRadians(defaultPlayerZRotation);
+player.rotation.x = degreesToRadians(90);
 
 window.addEventListener("resize", function () {
     engine.resize();
@@ -171,31 +182,56 @@ window.addEventListener("resize", function () {
 function movePlayerAndCamera(x,z) {
     player.position.x += x;
     player.position.z += z;
+    
 
     camera.position.x += x;
     camera.position.z += z;
 }
 
+function rotateRight() {
+    player.rotation.z = degreesToRadians(defaultPlayerZRotation - playerTilt);
+    camera.rotation.z = degreesToRadians(defaultCameraZRotation + tilt);
+}
 
+function rotateLeft() {
+    player.rotation.z = degreesToRadians(defaultPlayerZRotation + playerTilt);
+    camera.rotation.z = degreesToRadians(defaultCameraZRotation - tilt);
+}
 
-
+function resetRotation() {
+    player.rotation.z = degreesToRadians(defaultPlayerZRotation);
+    camera.rotation.z = degreesToRadians(defaultCameraZRotation);
+}
 
 scene.onKeyboardObservable.add(function(eventData) {
     if (eventData.type == BABYLON.KeyboardEventTypes.KEYDOWN) {
+
         switch (eventData.event.key) {
             case "ArrowLeft":
+                rotateLeft();
                 movePlayerAndCamera(-horizontalMovementSpeed, 0);
                 break;
             case "ArrowRight":
+                rotateRight();
                 movePlayerAndCamera(horizontalMovementSpeed, 0);
                 break;
-            case "P":
-            console.log("s-a apasat P")
-            break;
+        }
+        // Unmuting the sound when the user interacts with the game
+        unmuteAudio();
+    }
+
+    if (eventData.type == BABYLON.KeyboardEventTypes.KEYUP) {
+        switch (eventData.event.key) {
+            case "ArrowLeft":
+                resetRotation();
+                break;
+            case "ArrowRight":
+                resetRotation();
+                break;
         }
     }
-})
 
+})
 
 function getFrameTime() {
     return frameCount / 60;
@@ -225,11 +261,17 @@ function checkCoinsIntersections() {
     for (let coin of displayedCoins) {
         if (player.intersectsMesh(coin, false)) {
             intersects = true;
+            let index = displayedCoins.indexOf(coin);
+            if (index > -1) { // only splice array when item is found
+                displayedCoins.splice(index, 1);
+                coin.dispose();
+            }
         }
     }
     if (intersects) {
         player.material = lightMaterial;
-        score += 1;
+        coinEffect.play();
+        score += pointsPerCoin;
     } else {
         player.material = darkMaterial;
     }
@@ -241,6 +283,7 @@ function filterPassedBoxes() {
             let index = displayedBoxes.indexOf(box);
             if (index > -1) { // only splice array when item is found
                 displayedBoxes.splice(index, 1);
+                box.dispose();
             }
         }
     }
@@ -252,6 +295,7 @@ function filterPassedCoins() {
             let index = displayedCoins.indexOf(coin);
             if (index > -1) { // only splice array when item is found
                 displayedCoins.splice(index, 1);
+                coin.dispose();
             }
         }
     }
@@ -259,7 +303,6 @@ function filterPassedCoins() {
 
 function updatesHighScore() {
     const userLocalStorageKey = "users_key";
-    let loggedInUser = localStorage.getItem('loggedInUser');
     let returnedUsers = localStorage.getItem(userLocalStorageKey);
     if (returnedUsers) {
         users = JSON.parse(returnedUsers);
@@ -272,29 +315,31 @@ function updatesHighScore() {
     }
 
     localStorage.setItem(userLocalStorageKey, JSON.stringify(users));
-    
-    
 }
 
 function clickOnPlayAgain() {
-    console.log("s-a apasat butonul");
     window.location.href='../gamePage/gamePage.php';
 }
 
 function gameOver() {
     engine.stopRenderLoop();
-    let canvas = document.querySelector('.main-page-wrap');
-    canvas.innerHTML = `
-    // justify-content: center; 
-        <div style="margin-left: 50%; transform: translate(-50%); margin-top: 10px; margin-bottom: 10px; background-color: white; width: 20%; border: 3px solid black; padding: 10px; text-align: center;"> Game over!<br> Your score is: ${score}</div>
-        <button id="play-again-button" style="color: red; width: 20%; margin-left: 50%; transform: translate(-50%); border: 3px solid black; padding: 10px; text-align: center;"> Play again! </button>
-    `;
 
-    let btn = document.getElementById("play-again-button");
-    btn.addEventListener('click', event => {
-        clickOnPlayAgain();
-      });
-    updatesHighScore();
+    setTimeout(function() {
+        let canvas = document.querySelector('.main-page-wrap');
+        canvas.innerHTML = `
+        <div id="canvas">
+            <div style="position: relative; z-index: 1; margin-left: 50%; margin-bottom: 40px; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; transform: translate(-50%); margin-top: 30px; margin-bottom: 10px; background-color: white; opacity: 0.8; border-radius: 10px; width: 20%; font-size: 50px; border: 3px solid black; padding: 10px; text-align: center;"> Game over, ${loggedInUser}! <br> Your score is: ${score}</div>
+            <button id="play-again-button" style="cursor: pointer; background-color: #adb5bd; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; font-weight: bold; width: 20%; margin-left: 50%; margin-top: 30px; transform: translate(-50%); border: 3px solid black; padding: 10px; text-align: center; border-radius: 10px;"> Play again! </button>
+        </div>
+        `;
+
+        let btn = document.getElementById("play-again-button");
+        btn.addEventListener('click', event => {
+            clickOnPlayAgain();
+        });
+        updatesHighScore();
+    }, gameOverDelay);
+
 }
 
 
@@ -304,28 +349,56 @@ function rotateCoins() {
     }
 }
 
+function checkDifficulty() {
+    let timePassed = getFrameTime();
+    if (timePassed > 120) {
+        forwardMovementSpeed = 0.5;
+        pointsPerCoin = 5000;
+        boxGenerationRate = 0.10;
+    } else if (timePassed > 90) {
+        forwardMovementSpeed = 0.4;
+        pointsPerCoin = 4000;
+        boxGenerationRate = 0.13;
+    } else if (timePassed > 60) {
+        forwardMovementSpeed = 0.3;
+        pointsPerCoin = 3000;
+        boxGenerationRate = 0.17;
+    } else if (timePassed > 30) {
+        forwardMovementSpeed = 0.2;
+        pointsPerCoin = 2000;
+        boxGenerationRate = 0.20;
+    }
+}
+
+// render once to stop intersection bug
+scene.render();
+
+// create initial box in center
+createBox(1,0.5,0.5,0,0);
+
 engine.runRenderLoop(function() {
     updatePlayerPosition()
-    let secondsPassed = getFrameTime()
-    if (secondsPassed % boxGenerationRate == 0 && !secondsPassed == 0) {
+    let secondsPassed = getFrameTime();
+    if (Math.floor(frameCount % (boxGenerationRate * 60)) == 0 && secondsPassed > 1) {
         createRandomBox();
+    }
+    
+    if (Math.floor(frameCount % (coinGenerationRate * 60)) == 0 && secondsPassed > 1) {
         createRandomCoin();
     }
     
     if (checkIntersections()) {
+        boxEffect.play();
         gameOver();
     }
     checkCoinsIntersections()
     filterPassedBoxes()
     filterPassedCoins()
     rotateCoins()
+    checkDifficulty()
+    score += pointsPerFrame;
     frameCount += 1;
 
-    console.log(score);
-    // Tried to put the score on canvas -- not working
-    // let canvas = document.querySelector('#canvas');
-    // canvas.innerHTML += `
-    // something `;
-
+    scoreElement.innerHTML = `Score: ${score}`;
     scene.render();
 })

@@ -43,7 +43,6 @@ usernameAndScore.sort((a, b) => b[1] - a[1])
   }).join('');
 
   if (Object.keys(users).length !== 0) {
-    console.log("aici intra?")
     document.getElementById('tbody').innerHTML = tableContent;
   } else {
     console.log("intra?")
@@ -51,3 +50,22 @@ usernameAndScore.sort((a, b) => b[1] - a[1])
         <p style="padding: 20px; font-size: 30px; font-weight: bold;"> Nobody played the game yet :'( </p>        
     `;
   }
+
+
+//   Modify the navbar
+function logOut() {
+    localStorage.removeItem('loggedInUser');
+}
+
+function updateNavigationBar() {
+    let loggedInUser = localStorage.getItem('loggedInUser');
+    if(loggedInUser) {
+        let signIn = document.getElementById('signIn');
+        signIn.textContent = 'Sign out';
+        signIn.onclick = logOut;
+    }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    updateNavigationBar();
+});

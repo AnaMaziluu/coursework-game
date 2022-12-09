@@ -7,5 +7,19 @@ function onStartButtonClicked() {
     }
 }
 
-let loggedInUser = localStorage.getItem('loggedInUser');
-console.log(loggedInUser);
+function logOut() {
+    localStorage.removeItem('loggedInUser');
+}
+
+function updateNavigationBar() {
+    let loggedInUser = localStorage.getItem('loggedInUser');
+    if(loggedInUser) {
+        let signIn = document.getElementById('signIn');
+        signIn.textContent = 'Sign out';
+        signIn.onclick = logOut;
+    }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    updateNavigationBar();
+});

@@ -34,6 +34,7 @@ function outputHeader($title){
 function outputBannerNavigation($pageName){
     $linkNames = array("Ranking table", "Sign in/ Register");
     $linkAddresses = array("../rankingPage/rankingTable.php", "../loginPage/login.php");
+
     echo '<div class="navbar">
     <div class="logo">
         <a class="logo-link" href="../homePage/homePage.php"> 
@@ -47,6 +48,9 @@ function outputBannerNavigation($pageName){
         echo '<a ';
         if($linkNames[$x] == $pageName){
             echo 'class="selected" ';
+        }
+        if($linkNames[$x] == "Sign in/ Register"){
+            echo 'id="signIn" ';
         }
         echo 'href="' . $linkAddresses[$x] . '">' . $linkNames[$x] . '</a>';
     }
@@ -65,3 +69,5 @@ function outputFooter(){
     echo '</body>';
     echo '</html>';
 }
+
+?>

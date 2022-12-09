@@ -8,13 +8,16 @@
 ?>
 
 <!-- Contents of the page -->
-<div class="main-page-wrap">
+<div class="main-page-wrap" >
     <canvas id="canvas">
-        
+
     </canvas>
+    <div id="score" style="position: relative; z-index: 1; padding: 50x; color: green; margin-top: 10px; font-size: 40px; text-align: center">
+            Score
+    </div>
 </div>
 
-<script src="game.js" async defer></script>
+<script src="game.js"></script>
 
 <!-- Output the footer -->
 <?php
